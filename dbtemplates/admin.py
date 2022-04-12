@@ -90,7 +90,7 @@ class TemplateAdminForm(forms.ModelForm):
     description = forms.CharField(
         widget=forms.Textarea(attrs={
             'rows': '3',
-            'class': 'vLargeTextField-width-fix',
+            'class': 'vLargeTextField vLargeTextField-width-fix',
         }),
         required=False)
 
@@ -101,6 +101,15 @@ class TemplateAdminForm(forms.ModelForm):
 
 
 class TemplateAdmin(TemplateModelAdmin):
+    class Media:
+        css = {
+            'all': [
+                '%(media_prefix)scss/admin.css'.format(
+                    media_prefix=settings.DBTEMPLATES_MEDIA_PREFIX,
+                ),
+            ]
+        }
+
     form = TemplateAdminForm
     fieldsets = (
         (None, {
