@@ -104,12 +104,8 @@ class TemplateAdmin(TemplateModelAdmin):
     form = TemplateAdminForm
     fieldsets = (
         (None, {
-            'fields': ('name', 'content'),
-            'classes': ('monospace',),
+            'fields': ('name', 'description', 'content'),
         }),
-        (None, {
-            'fields': ('description',),
-        })
         (_('Advanced'), {
             'fields': (('sites'),),
         }),
