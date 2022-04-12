@@ -107,12 +107,8 @@ class TemplateAdmin(TemplateModelAdmin):
     readonly_fields = ['creation_date', 'last_changed']
     fieldsets = (
         (None, {
-            'fields': ('name', 'content'),
-            'classes': ('monospace',),
+            'fields': ('name', 'description', 'content'),
         }),
-        (None, {
-            'fields': ('description',),
-        })
         (_('Advanced'), {
             'fields': (('sites'),),
         }),
