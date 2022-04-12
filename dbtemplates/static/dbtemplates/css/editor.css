@@ -16,4 +16,14 @@
   font-size: 10pt;
   color: #999;
 }
-
+.CodeMirror-wrapping > iframe {
+  position: absolute;
+}
+@media(max-width: 767px) {
+  .CodeMirror-wrapping > iframe {
+    position: relative;
+  }
+  .CodeMirror-wrapping {
+    width: 100%;
+  }
+}
