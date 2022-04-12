@@ -89,6 +89,10 @@ class TemplateAdminForm(forms.ModelForm):
         widget=TemplateContentTextArea(attrs={'rows': '24'}),
         help_text=content_help_text, required=False)
 
+    description = forms.CharField(
+        widget=forms.Textarea(attrs={'rows': '3'}),
+        required=False)
+
     class Meta:
         model = Template
         fields = ('name', 'description', 'content', 'sites', 'creation_date', 'last_changed')
@@ -100,9 +104,12 @@ class TemplateAdmin(TemplateModelAdmin):
     readonly_fields = ['creation_date', 'last_changed']
     fieldsets = (
         (None, {
-            'fields': ('name', 'description', 'content'),
+            'fields': ('name', 'content'),
             'classes': ('monospace',),
         }),
+        (None, {
+            'fields': ('description',),
+        })
         (_('Advanced'), {
             'fields': (('sites'),),
         }),
