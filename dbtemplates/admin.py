@@ -88,7 +88,10 @@ class TemplateAdminForm(forms.ModelForm):
         help_text=content_help_text, required=False)
 
     description = forms.CharField(
-        widget=forms.Textarea(attrs={'rows': '3'}),
+        widget=forms.Textarea(attrs={
+            'rows': '3',
+            'class': 'vLargeTextField-width-fix',
+        }),
         required=False)
 
     class Meta:
