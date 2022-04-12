@@ -92,7 +92,7 @@ class TemplateAdminForm(forms.ModelForm):
     description = forms.CharField(
         widget=forms.Textarea(attrs={
             'rows': '3',
-            'class': 'vLargeTextField vLargeTextField-width-fix',
+            'class': 'vLargeTextField',
         }),
         required=False)
 
@@ -103,15 +103,6 @@ class TemplateAdminForm(forms.ModelForm):
 
 
 class TemplateAdmin(TemplateModelAdmin):
-    class Media:
-        css = {
-            'all': [
-                '%(media_prefix)scss/admin.css'.format(
-                    media_prefix=settings.DBTEMPLATES_MEDIA_PREFIX,
-                ),
-            ]
-        }
-
     form = TemplateAdminForm
     readonly_fields = ['creation_date', 'last_changed']
     fieldsets = (
