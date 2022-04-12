@@ -18,6 +18,8 @@
 }
 .CodeMirror-wrapping > iframe {
   position: absolute;
+  border: 1px solid #ccc !important;
+  border-radius: 4px !important;
 }
 @media(max-width: 767px) {
   .CodeMirror-wrapping > iframe {
