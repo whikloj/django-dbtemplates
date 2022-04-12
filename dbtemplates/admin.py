@@ -91,7 +91,7 @@ class TemplateAdminForm(forms.ModelForm):
 
     class Meta:
         model = Template
-        fields = ('name', 'content', 'sites', 'creation_date', 'last_changed')
+        fields = ('name', 'description', 'content', 'sites', 'creation_date', 'last_changed')
         fields = "__all__"
 
 
@@ -100,7 +100,7 @@ class TemplateAdmin(TemplateModelAdmin):
     readonly_fields = ['creation_date', 'last_changed']
     fieldsets = (
         (None, {
-            'fields': ('name', 'content'),
+            'fields': ('name', 'description', 'content'),
             'classes': ('monospace',),
         }),
         (_('Advanced'), {
@@ -115,7 +115,7 @@ class TemplateAdmin(TemplateModelAdmin):
     list_display = ('name', 'creation_date', 'last_changed', 'site_list')
     list_filter = ('sites',)
     save_as = True
-    search_fields = ('name', 'content')
+    search_fields = ('name', 'description', 'content')
     actions = ['invalidate_cache', 'repopulate_cache', 'check_syntax']
 
     def invalidate_cache(self, request, queryset):
