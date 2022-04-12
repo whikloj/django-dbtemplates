@@ -19,6 +19,7 @@ class Template(models.Model):
     """
     name = models.CharField(_('name'), max_length=100,
                             help_text=_("Example: 'flatpages/default.html'"))
+    description = models.TextField(_('description'), blank=True)
     content = models.TextField(_('content'), blank=True)
     sites = models.ManyToManyField(Site, verbose_name=_(u'sites'),
                                    blank=True)
