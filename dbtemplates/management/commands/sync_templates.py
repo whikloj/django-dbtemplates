@@ -41,16 +41,38 @@ class Command(BaseCommand):
             help="look for templates in applications "
                  "directories before project templates")
         parser.add_argument(
-            "-d", "--delete",
-            action="store_true", dest="delete", default=False,
-            help="Delete templates after syncing")
+            "-d",
+            "--delete",
+            action="store_true",
+            dest="delete",
+            default=False,
+            help="Delete templates after syncing",
+        )
+        group = parser.add_mutually_exclusive_group()
+        group.add_argument(
+            "-y",
+            "--yes",
+            action="store_true",
+            dest="auto_answer",
+            default=None,
+            help="Answer yes to all template creation questions."
+        )
+        group.add_argument(
+            "-n",
+            "--no",
+            action="store_false",
+            dest="auto_answer",
+            default=None,
+            help="Answer no to all template creation questions."
+        )
 
     def handle(self, **options):
-        extension = options.get('ext')
-        force = options.get('force')
-        overwrite = options.get('overwrite')
-        app_first = options.get('app_first')
-        delete = options.get('delete')
+        extension = options.get("ext")
+        force = options.get("force")
+        overwrite = options.get("overwrite")
+        app_first = options.get("app_first")
+        delete = options.get("delete")
+        auto_answer = options.get('auto_answer')
 
         if not extension.startswith("."):
             extension = ".%s" % extension
@@ -79,12 +101,15 @@ class Command(BaseCommand):
                         t = Template.on_site.get(name__exact=name)
                     except Template.DoesNotExist:
                         if not force:
-                            confirm = input(
-                                "\nA '%s' template doesn't exist in the "
-                                "database.\nCreate it with '%s'?"
-                                " (y/[n]): """ % (name, path))
-                        if force or confirm.lower().startswith('y'):
-                            with io.open(path, encoding='utf-8') as f:
+                            if auto_answer is not None:
+                                confirm = "y" if auto_answer else "n"
+                            else:
+                                confirm = input(
+                                    "\nA '%s' template doesn't exist in the "
+                                    "database.\nCreate it with '%s'?"
+                                    " (y/[n]): """ % (name, path))
+                        if force or confirm.lower().startswith("y"):
+                            with io.open(path, encoding="utf-8") as f:
                                 t = Template(name=name, content=f.read())
                             t.save()
                             t.sites.add(site)

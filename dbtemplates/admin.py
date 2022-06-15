@@ -3,9 +3,9 @@ from django import forms
 from django.contrib import admin
 from django.core.exceptions import ImproperlyConfigured
 try:
-    from django.utils.translation import ngettext, gettext_lazy as _
+    from django.utils.translation import ngettext as _gettext, gettext_lazy as _
 except ImportError:
-    from django.utils.translation import ungettext, ugettext_lazy as _
+    from django.utils.translation import ungettext as _gettext, ugettext_lazy as _
 from django.utils.safestring import mark_safe
 
 from dbtemplates.conf import settings
@@ -128,7 +128,7 @@ class TemplateAdmin(TemplateModelAdmin):
         for template in queryset:
             remove_cached_template(template)
         count = queryset.count()
-        message = ungettext(
+        message = _gettext(
             "Cache of one template successfully invalidated.",
             "Cache of %(count)d templates successfully invalidated.",
             count)
@@ -140,7 +140,7 @@ class TemplateAdmin(TemplateModelAdmin):
         for template in queryset:
             add_template_to_cache(template)
         count = queryset.count()
-        message = ungettext(
+        message = _gettext(
             "Cache successfully repopulated with one template.",
             "Cache successfully repopulated with %(count)d templates.",
             count)
@@ -156,7 +156,7 @@ class TemplateAdmin(TemplateModelAdmin):
                 errors.append('%s: %s' % (template.name, error))
         if errors:
             count = len(errors)
-            message = ungettext(
+            message = _gettext(
                 "Template syntax check FAILED for %(names)s.",
                 "Template syntax check FAILED for %(count)d templates: %(names)s.",
                 count)
@@ -164,7 +164,7 @@ class TemplateAdmin(TemplateModelAdmin):
                               {'count': count, 'names': ', '.join(errors)})
         else:
             count = queryset.count()
-            message = ungettext(
+            message = _gettext(
                 "Template syntax OK.",
                 "Template syntax OK for %(count)d templates.", count)
             self.message_user(request, message % {'count': count})
