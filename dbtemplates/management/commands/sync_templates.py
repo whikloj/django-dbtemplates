@@ -44,6 +44,14 @@ class Command(BaseCommand):
             "-d", "--delete",
             action="store_true", dest="delete", default=False,
             help="Delete templates after syncing")
+        parser.add_argument(
+            "-y", "--yes",
+            action="store_true", dest="auto_yes", default=None,
+            help="Automatically answer yes to all questions.")
+        parser.add_argument(
+            "-n", "--no",
+            action="store_true", dest="auto_no", default=None,
+            help="Automatically answer no to all questions.")
 
     def handle(self, **options):
         extension = options.get('ext')
@@ -51,6 +59,18 @@ class Command(BaseCommand):
         overwrite = options.get('overwrite')
         app_first = options.get('app_first')
         delete = options.get('delete')
+        auto_yes = options.get('auto_yes')
+        auto_no = options.get('auto_no')
+
+        # Can only choose -y or -n
+        if auto_no is not None and auto_yes is not None:
+            raise CommandError("The --no and --yes options are mutually exclusive, you can only choose one at a time.")
+        # If neither is chosen we prompt.
+        elif auto_no is None and auto_yes is None:
+            auto_answer = None
+        else:
+            # Otherwise if yes is set then "y", otherwise "n"
+            auto_answer = "y" if auto_yes is not None else "n"
 
         if not extension.startswith("."):
             extension = ".%s" % extension
@@ -79,10 +99,13 @@ class Command(BaseCommand):
                         t = Template.on_site.get(name__exact=name)
                     except Template.DoesNotExist:
                         if not force:
-                            confirm = input(
-                                "\nA '%s' template doesn't exist in the "
-                                "database.\nCreate it with '%s'?"
-                                " (y/[n]): """ % (name, path))
+                            if auto_answer is not None:
+                                confirm = auto_answer
+                            else:
+                                confirm = input(
+                                    "\nA '%s' template doesn't exist in the "
+                                    "database.\nCreate it with '%s'?"
+                                    " (y/[n]): """ % (name, path))
                         if force or confirm.lower().startswith('y'):
                             with io.open(path, encoding='utf-8') as f:
                                 t = Template(name=name, content=f.read())
