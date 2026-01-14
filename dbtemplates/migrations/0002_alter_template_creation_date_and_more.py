@@ -10,6 +10,11 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
+        migrations.AddField(
+            model_name='Template',
+            name='description',
+            field=models.TextField(verbose_name='description', blank=True),
+        ),
         migrations.AlterField(
             model_name='template',
             name='creation_date',
